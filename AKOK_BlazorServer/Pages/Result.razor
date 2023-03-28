@@ -1,0 +1,42 @@
+﻿@page "/result"
+@using AKOK_BlazorServer.Data
+@using AKOK_BlazorServer.Services
+@inject NavigationManager NavigationManager
+@inject ResultTextService ResultTextService
+<h2>Үр дүн</h2>
+
+<h4>Your Name Number is: @resultNameNumber</h4>
+<p>@ResultTextService.GetLongText(resultNameNumber)</p>
+
+@if (resultNameNumber != dynamicsOfLifeNumber)
+{
+    <h4>Your Dynamics Of Life Number  is: @dynamicsOfLifeNumber</h4>
+    <p>@ResultTextService.GetLongText(dynamicsOfLifeNumber)</p>
+}
+
+@if (hybridNumber != null && hybridNumber != 0)
+{
+    <h4>Your Hybrid Of Life Number  is: @hybridNumber</h4>
+    <p>@ResultTextService.GetLongText(hybridNumber.Value)</p>
+}
+
+@code {
+    private int resultNameNumber;
+    private int? hybridNumber;
+    private int dynamicsOfLifeNumber;
+    private bool showHybridNumber = true;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("feeConfirmation", out var feeConfirmationJson))
+        {
+            var feeConfirmation = System.Text.Json.JsonSerializer.Deserialize<FeeConfirmation>(feeConfirmationJson);
+            resultNameNumber = feeConfirmation.ResultNameNumber;
+            dynamicsOfLifeNumber = feeConfirmation.DynamicsOfLifeNumber;
+            hybridNumber = feeConfirmation.ResultNameNumberHybrid;
+        }
+    }
+}

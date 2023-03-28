@@ -1,0 +1,96 @@
+﻿@page "/"
+@page "/fortunetellingbynumber"
+@using System.ComponentModel.DataAnnotations
+@inject NavigationManager NavigationManager
+
+<h4>Сайн уу, Та доорх талбарыг бөглөнө үү.</h4>
+
+
+<EditForm Model="@person" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="firstName">Өөрийн Нэр:</label>
+        <InputText id="firstName" @bind-value="person.FirstName" ValueExpression="@(() => person.FirstName)" class="form-control" />
+    </div>
+    @*<div class="form-group">
+        <label for="middleName">Middle Name:</label>
+        <InputText id="middleName" @bind-value="person.MiddleName" ValueExpression="@(() => person.MiddleName)" class="form-control" />
+        
+    </div>*@
+    <div class="form-group">
+        <label for="lastName">Овог Нэр:</label>
+        <InputText id="lastName" @bind-value="person.LastName" ValueExpression="@(() => person.LastName)" class="form-control" />
+
+    </div>
+    <div class="form-group">
+        <label for="dateOfBirth">Төрсөн Өдөр:</label>
+        <InputDate TValue="DateTime" id="dateOfBirth" @bind-value="person.DateOfBirth" ValueExpression="@(() => person.DateOfBirth)" class="form-control" />
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <button type="submit" class="btn btn-primary mx-3">Next</button>
+    </div>
+</EditForm>
+
+
+@code {
+    private Person person = new Person();
+    public FeeConfirmation feeConfirmation = new FeeConfirmation();
+
+    protected override void OnInitialized()
+    {
+        person.DateOfBirth = DateTime.Today.AddMonths(-120);
+    }
+
+    private void HandleValidSubmit()
+    {
+        //Name related Number
+        var name = $"{person.FirstName} {person.MiddleName} {person.LastName}".ToUpper();
+        var nameSum = name.Sum(c => char.IsLetter(c) ? (c - 'A') % 9 + 1 : 0);
+        var result = 0;
+        if (nameSum == 11 || nameSum == 22)
+        {
+            feeConfirmation.ResultNameNumberHybrid = nameSum;
+        }
+        while (nameSum > 0)
+        {
+            result += nameSum % 10;
+            nameSum /= 10;
+        }
+        if (result > 9)
+        {
+            nameSum = result;
+            result = nameSum % 10;
+            nameSum /= 10;
+            result += nameSum;
+        }
+
+        feeConfirmation.ResultNameNumber = result;
+
+        //DOB related Number
+        var dayOfBirth = person.DateOfBirth.Day;
+        var monthOfBirth = person.DateOfBirth.Month;
+        var yearOfBirth = person.DateOfBirth.Year;
+
+        var dynamicsOfLifeNumber = dayOfBirth + monthOfBirth + yearOfBirth;
+
+        if (dynamicsOfLifeNumber != 11 && dynamicsOfLifeNumber != 22)
+        {
+            while (dynamicsOfLifeNumber > 9)
+            {
+                dynamicsOfLifeNumber = dynamicsOfLifeNumber.ToString().Sum(c => c - '0');
+                if (dynamicsOfLifeNumber == 11 || dynamicsOfLifeNumber == 22)
+                {
+                    feeConfirmation.ResultNameNumberHybrid = dynamicsOfLifeNumber;
+                }
+            }
+        }
+
+        feeConfirmation.DynamicsOfLifeNumber = dynamicsOfLifeNumber;
+
+        var feeConfirmationJson = System.Text.Json.JsonSerializer.Serialize(feeConfirmation);
+        NavigationManager.NavigateTo($"/feeconfirmbycode?feeConfirmation={Uri.EscapeDataString(feeConfirmationJson)}");
+    }
+}
