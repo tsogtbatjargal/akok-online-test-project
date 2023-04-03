@@ -6,9 +6,7 @@ namespace AKOK_BlazorServer.Data
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
-        [Required]
-        public string SecretCode { get; set; }
+        public string Email { get; set; }        
         public int ResultNameNumber { get; set; }
         public int? ResultNameNumberHybrid { get; set; }
         public int DynamicsOfLifeNumber { get; set; }

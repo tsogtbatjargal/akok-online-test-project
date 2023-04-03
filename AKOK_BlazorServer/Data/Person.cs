@@ -11,5 +11,6 @@ namespace AKOK_BlazorServer.Data
         public string LastName { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
+
     }
 }

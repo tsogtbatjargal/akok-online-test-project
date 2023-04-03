@@ -2,9 +2,10 @@
 @using AKOK_BlazorServer.Data
 @using System.ComponentModel.DataAnnotations
 @using System.Linq.Expressions;
+
 @inject NavigationManager NavigationManager
 
-<h2>Баталгаажуулалт</h2>
+<h3>Баталгаажуулалт</h3>
 
 <EditForm Model="@feeConfirmation" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -14,53 +15,85 @@
         <label for="email">Мэйл Хаяг:</label>
         <InputText id="email" @bind-value="feeConfirmation.Email" ValueExpression="@(() => feeConfirmation.Email)" class="form-control" />
     </div>
-    <div class="form-group">
-        <label for="secretCode">Нууц Код:</label>
-        @*<InputText id="secretCode" @bind-value="feeConfirmation.SecretCode" ValueExpression="@(() => feeConfirmation.SecretCode)" class="form-control"
-                   @oninput="(args) => showSubmitButton = !string.IsNullOrWhiteSpace(args.Value.ToString())" />*@
-        @*<InputText id="secretCode" class="form-control"
-                   @bind-value="feeConfirmation.SecretCode"
-                   ValueExpression="() => feeConfirmation.SecretCode"
-                   OnChange="(args) => showSubmitButton = args.Value?.ToString() == sixDigitNumber" />*@
-        <InputText id="secretCode" class="form-control"
-                   @bind-value="feeConfirmation.SecretCode"
-                   ValueExpression="@SecretCodeValueExpression"
-                   OnChange="(args) => showSubmitButton = args.Value?.ToString() == sixDigitNumber" />
+    
 
-
-    </div>
-
-    @if (!string.IsNullOrWhiteSpace(feeConfirmation.SecretCode) && showSubmitButton)
+    @if (showSubmitButton)
     {
         <div class="d-flex justify-content-center mt-4">
             <button type="submit" class="btn btn-primary mx-3">Submit</button>
         </div>        
     }
+    <h1>Confirm Code</h1>
+
+    @if (showSuccessMessage)
+    {
+        <div class="alert alert-success" role="alert">
+            String matches the stored value!
+        </div>
+    }
+    else if (showErrorMessage)
+    {
+        <div class="alert alert-danger" role="alert">
+            String does not match the stored value.
+        </div>
+    }  
+
+
+    <div class="form-group">
+        <label for="inputString">Input String:</label>
+        <input id="inputString" class="form-control" @bind-value="@inputString" />
+    </div>
+
+    <button class="btn btn-primary" @onclick="CheckString">Check String</button>
+
+
 </EditForm>
 
 @code {
-    private Expression<Func<string>> SecretCodeValueExpression => () => feeConfirmation.SecretCode;
 
-    public string sixDigitNumber;
-    private FeeConfirmation feeConfirmation = new FeeConfirmation { SecretCode = string.Empty };
+    private bool showSuccessMessage = false;
+    private bool showErrorMessage = false;
+
+    private string inputString;
+
+    private FeeConfirmation feeConfirmation = new FeeConfirmation ();
 
     private bool showSubmitButton = false;
     protected override void OnInitialized()
-    {
+    {        
         base.OnInitialized();
-
 
         var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("feeConfirmation", out var feeConfirmationJson))
         {
             feeConfirmation = System.Text.Json.JsonSerializer.Deserialize<FeeConfirmation>(feeConfirmationJson);
         }
-        showSubmitButton = !string.IsNullOrWhiteSpace(feeConfirmation.SecretCode);
+
+    }
+
+    private void CheckString()
+    {
+        var storedPassCodes = PassCode.GetMyValue();
+        if (storedPassCodes != null && storedPassCodes.Contains(inputString))
+        {
+            showSuccessMessage = true;
+            showErrorMessage = false;
+            PassCode.RemoveValue(inputString);
+        }
+        else
+        {
+            showSuccessMessage = false;
+            showErrorMessage = true;
+        }
     }
 
     private void HandleValidSubmit()
     {
-        var feeConfirmationJson = System.Text.Json.JsonSerializer.Serialize(feeConfirmation);
-        NavigationManager.NavigateTo($"/result?feeConfirmation={Uri.EscapeDataString(feeConfirmationJson)}");
+        if (!showErrorMessage)
+        {
+            var feeConfirmationJson = System.Text.Json.JsonSerializer.Serialize(feeConfirmation);
+            NavigationManager.NavigateTo($"/result?feeConfirmation={Uri.EscapeDataString(feeConfirmationJson)}");
+        }
     }
+
 }

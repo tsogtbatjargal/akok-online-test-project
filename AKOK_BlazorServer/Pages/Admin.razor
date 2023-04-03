@@ -1,11 +1,27 @@
-﻿@page "/customizeresult"
+﻿@page "/admin"
 @using AKOK_BlazorServer.Data
 @using AKOK_BlazorServer.Services
 @inject ResultTextService ResultTextService
 @inject IConfiguration Configuration
 @inject NavigationManager NavigationManager
 
-<h1>Customize Result Text</h1>
+<h3>Admin Page</h3>
+
+<div class="form-group">
+    
+    @if (generatedCode != null)
+    {
+        <p>Your secret code is: @generatedCode</p>
+    }
+    else
+    {
+        <p>Click on Generate Code button for new code!</p>
+    }
+</div>
+
+<button class="btn btn-secondary" @onclick="GenerateCode">Generate Code</button>
+<button class="btn btn-primary" @onclick="StoreValue">Store Value</button>
+
 
 <div class="form-group">
     <label for="number">Number:</label>
@@ -24,51 +40,43 @@
 <button type="button" class="btn btn-primary" @onclick="@Save">Save</button>
 <button type="button" class="btn btn-secondary" @onclick="@Cancel">Cancel</button>
 
-<div class="form-group">
-    <label for="secretCode">Secret Code:</label>
-    
-    <InputText id="txtSecretCode" class="form-control" readonly @bind-value="sixDigitNumber"
-               ValueExpression="@(() => sixDigitNumber)" />
-
-</div>
-
-
-<button type="button" class="btn btn-primary" @onclick="GenerateCode">Generate Code</button>
 
 @code {
     private int selectedNumber { get; set; }
     private string longText { get; set; }
-    private string secretCode { get; set; }
-    private string sixDigitNumber { get; set; }
-
+    
     private readonly List<int> Numbers = new List<int>
     {
         1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22
     };
 
+    private string generatedCode;
+
     private void GenerateCode()
     {
-        var random = GenerateSixDigitNumber();
-        sixDigitNumber = random.ToString();
-
+        Random random = new Random();
+        generatedCode = random.Next(1000, 9999).ToString();        
     }
 
-    private int GenerateSixDigitNumber()
+    private void StoreValue()
     {
-        var random = new Random();
-        return random.Next(100000, 999999);
+        PassCode.SetValue(generatedCode);
     }
+
+
+
 
     protected override void OnInitialized()
     {
         selectedNumber = Numbers.First();
         longText = ResultTextService.GetLongText(selectedNumber);
+        
     }
 
     private void Save()
     {
         Configuration[$"longText:{selectedNumber}"] = longText;
-        NavigationManager.NavigateTo("/customizeresult");
+        NavigationManager.NavigateTo("/admin");
     }
 
     private void Cancel()
