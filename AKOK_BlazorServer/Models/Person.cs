@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AKOK_BlazorServer.Data
+namespace AKOK_BlazorServer.Models
 {
     public class Person
     {
@@ -11,6 +11,9 @@ namespace AKOK_BlazorServer.Data
         public string LastName { get; set; }
         [Required]
         public DateTime DateOfBirth { get; set; }
+        
+        [EmailAddress]
+        public string Email { get; set; }
 
     }
 }

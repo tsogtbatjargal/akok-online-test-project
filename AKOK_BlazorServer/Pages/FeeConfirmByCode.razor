@@ -1,19 +1,14 @@
 ﻿@page "/feeconfirmbycode"
-@using AKOK_BlazorServer.Data
-@using System.ComponentModel.DataAnnotations
-@using System.Linq.Expressions;
 
-@inject NavigationManager NavigationManager
+<TitleComponent TitleName="Баталгаажуулалт"></TitleComponent>
 
-<h3>Баталгаажуулалт</h3>
-
-<EditForm Model="@feeConfirmation" OnValidSubmit="HandleValidSubmit">
+<EditForm Model="@person" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group">
         <label for="email">Мэйл Хаяг:</label>
-        <InputText id="email" @bind-value="feeConfirmation.Email" ValueExpression="@(() => feeConfirmation.Email)" class="form-control" />
+        <InputText id="email" @bind-value="person.Email" ValueExpression="@(() => person.Email)" class="form-control" />
     </div>
     
 
@@ -23,8 +18,7 @@
             <button type="submit" class="btn btn-primary mx-3">Submit</button>
         </div>        
     }
-    <h1>Confirm Code</h1>
-
+    
     @if (showSuccessMessage)
     {
         <div class="alert alert-success" role="alert">
@@ -44,7 +38,7 @@
         <input id="inputString" class="form-control" @bind-value="@inputString" />
     </div>
 
-    <button class="btn btn-primary" @onclick="CheckString">Check String</button>
+    <button class="btn btn-primary" @onclick="CheckString">Next</button>
 
 
 </EditForm>
@@ -56,19 +50,14 @@
 
     private string inputString;
 
-    private FeeConfirmation feeConfirmation = new FeeConfirmation ();
+    private Person person = new Person ();
 
     private bool showSubmitButton = false;
     protected override void OnInitialized()
+
     {        
         base.OnInitialized();
-
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("feeConfirmation", out var feeConfirmationJson))
-        {
-            feeConfirmation = System.Text.Json.JsonSerializer.Deserialize<FeeConfirmation>(feeConfirmationJson);
-        }
-
+        person = ResultTextService.PersonResult;
     }
 
     private void CheckString()
@@ -91,8 +80,8 @@
     {
         if (!showErrorMessage)
         {
-            var feeConfirmationJson = System.Text.Json.JsonSerializer.Serialize(feeConfirmation);
-            NavigationManager.NavigateTo($"/result?feeConfirmation={Uri.EscapeDataString(feeConfirmationJson)}");
+            ResultTextService.SetValueForPerson(person);
+            NavigationManager.NavigateTo("/result");
         }
     }
 

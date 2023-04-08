@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AKOK_BlazorServer.Data
+﻿namespace AKOK_BlazorServer.Models
 {
     public static class PassCode
     {

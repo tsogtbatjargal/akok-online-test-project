@@ -1,9 +1,6 @@
 ﻿@page "/result"
-@using AKOK_BlazorServer.Data
-@using AKOK_BlazorServer.Services
-@inject NavigationManager NavigationManager
-@inject ResultTextService ResultTextService
-<h2>Үр дүн</h2>
+
+<TitleComponent TitleName="Үр дүн"></TitleComponent>
 
 <h4>Your Name Number is: @resultNameNumber</h4>
 <p>@ResultTextService.GetLongText(resultNameNumber)</p>
@@ -29,14 +26,9 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-
-        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        if (Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query).TryGetValue("feeConfirmation", out var feeConfirmationJson))
-        {
-            var feeConfirmation = System.Text.Json.JsonSerializer.Deserialize<FeeConfirmation>(feeConfirmationJson);
-            resultNameNumber = feeConfirmation.ResultNameNumber;
-            dynamicsOfLifeNumber = feeConfirmation.DynamicsOfLifeNumber;
-            hybridNumber = feeConfirmation.ResultNameNumberHybrid;
-        }
+        var fortuneNumber = ResultTextService.FortuneNumberResult;
+        resultNameNumber = fortuneNumber.ResultNameNumber;
+        dynamicsOfLifeNumber = fortuneNumber.DynamicsOfLifeNumber;
+        hybridNumber = fortuneNumber.ResultNameNumberHybrid;
     }
 }

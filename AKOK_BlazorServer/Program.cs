@@ -1,4 +1,4 @@
-using AKOK_BlazorServer.Data;
+using AKOK_BlazorServer.Models;
 using AKOK_BlazorServer.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;

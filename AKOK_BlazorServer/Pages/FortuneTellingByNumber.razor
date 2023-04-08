@@ -1,10 +1,7 @@
 ﻿@page "/"
 @page "/fortunetellingbynumber"
-@using System.ComponentModel.DataAnnotations
-@inject NavigationManager NavigationManager
 
-<h4>Сайн уу, Та доорх талбарыг бөглөнө үү.</h4>
-
+<TitleComponent TitleName="Сайн уу, Та доорх талбарыг бөглөнө үү"></TitleComponent>
 
 <EditForm Model="@person" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -32,7 +29,7 @@
 
 @code {
     private Person person = new Person();
-    public FeeConfirmation feeConfirmation = new FeeConfirmation();
+    public FortuneNumber fortuneNumber = new FortuneNumber();
 
     protected override void OnInitialized()
     {
@@ -47,7 +44,7 @@
         var result = 0;
         if (nameSum == 11 || nameSum == 22)
         {
-            feeConfirmation.ResultNameNumberHybrid = nameSum;
+            fortuneNumber.ResultNameNumberHybrid = nameSum;
         }
         while (nameSum > 0)
         {
@@ -62,7 +59,7 @@
             result += nameSum;
         }
 
-        feeConfirmation.ResultNameNumber = result;
+        fortuneNumber.ResultNameNumber = result;
 
         //DOB related Number
         var dayOfBirth = person.DateOfBirth.Day;
@@ -78,14 +75,16 @@
                 dynamicsOfLifeNumber = dynamicsOfLifeNumber.ToString().Sum(c => c - '0');
                 if (dynamicsOfLifeNumber == 11 || dynamicsOfLifeNumber == 22)
                 {
-                    feeConfirmation.ResultNameNumberHybrid = dynamicsOfLifeNumber;
+                    fortuneNumber.ResultNameNumberHybrid = dynamicsOfLifeNumber;
                 }
             }
         }
 
-        feeConfirmation.DynamicsOfLifeNumber = dynamicsOfLifeNumber;
+        fortuneNumber.DynamicsOfLifeNumber = dynamicsOfLifeNumber;
 
-        var feeConfirmationJson = System.Text.Json.JsonSerializer.Serialize(feeConfirmation);
-        NavigationManager.NavigateTo($"/feeconfirmbycode?feeConfirmation={Uri.EscapeDataString(feeConfirmationJson)}");
+        ResultTextService.SetValueForPerson(person);
+        ResultTextService.SetValueForFeeConfirmation(fortuneNumber);
+        NavigationManager.NavigateTo("/feeconfirmbycode");
+
     }
 }

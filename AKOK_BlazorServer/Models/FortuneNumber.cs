@@ -1,12 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AKOK_BlazorServer.Data
+namespace AKOK_BlazorServer.Models
 {
-    public class FeeConfirmation
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }        
+    public class FortuneNumber
+    {        
         public int ResultNameNumber { get; set; }
         public int? ResultNameNumberHybrid { get; set; }
         public int DynamicsOfLifeNumber { get; set; }

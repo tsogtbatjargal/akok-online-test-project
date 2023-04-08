@@ -8,5 +8,12 @@
 @using Microsoft.JSInterop
 @using AKOK_BlazorServer
 @using AKOK_BlazorServer.Shared
-@using AKOK_BlazorServer.Data
+
+@using AKOK_BlazorServer.Models
 @using AKOK_BlazorServer.Services
+@using System.ComponentModel.DataAnnotations
+@using System.Linq.Expressions;
+@using AKOK_BlazorServer.Controls;
+@inject ResultTextService ResultTextService
+@inject IConfiguration Configuration
+@inject NavigationManager NavigationManager
