@@ -3,7 +3,7 @@
 <TitleComponent TitleName="Үр дүн"></TitleComponent>
 
 <h4>Your Name Number is: @resultNameNumber</h4>
-<p>@ResultTextService.GetLongText(resultNameNumber)</p>
+@*<p>@ResultTextService.GetLongText(resultNameNumber)</p>
 
 @if (resultNameNumber != dynamicsOfLifeNumber)
 {
@@ -15,7 +15,7 @@
 {
     <h4>Your Hybrid Of Life Number  is: @hybridNumber</h4>
     <p>@ResultTextService.GetLongText(hybridNumber.Value)</p>
-}
+}*@
 
 @code {
     private int resultNameNumber;

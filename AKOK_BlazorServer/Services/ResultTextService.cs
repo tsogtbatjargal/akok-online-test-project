@@ -1,10 +1,16 @@
-﻿using AKOK_BlazorServer.Models;
+﻿using AKOK_BlazorServer.Data;
+using AKOK_BlazorServer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AKOK_BlazorServer.Services
 {
     public class ResultTextService
     {
-        private readonly IConfiguration _config;
+        private readonly FortuneDbContext _context;
+        public ResultTextService(FortuneDbContext context)
+        {
+            _context = context;
+        }
         public FortuneNumber FortuneNumberResult { get; set; }
         public Person PersonResult { get; set; }
 
@@ -30,14 +36,32 @@ namespace AKOK_BlazorServer.Services
             };
         }
 
-        public ResultTextService(IConfiguration config)
+        public async Task<ResultText> GetResultText(int number)
         {
-            _config = config;
+            return await _context.ResultTexts.FirstOrDefaultAsync(rt => rt.Number == number);
         }
 
-        public string GetLongText(int number)
+        public async Task<List<ResultText>> GetResultTexts()
         {
-            return _config[$"LongText:{number}"];
+            return await _context.ResultTexts.ToListAsync();
+        }
+
+        public async Task CreateResultText(ResultText resultText)
+        {
+            _context.ResultTexts.Add(resultText);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateResultText(ResultText resultText)
+        {
+            _context.Entry(resultText).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteResultText(ResultText resultText)
+        {
+            _context.ResultTexts.Remove(resultText);
+            await _context.SaveChangesAsync();
         }
     }
 }

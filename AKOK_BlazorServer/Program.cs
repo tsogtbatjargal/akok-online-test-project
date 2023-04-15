@@ -1,8 +1,13 @@
+using AKOK_BlazorServer.Data;
 using AKOK_BlazorServer.Models;
 using AKOK_BlazorServer.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +16,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<ResultTextService>();
+// Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<FortuneDbContext>(options =>
+    options.UseSqlite(connectionString));
+
+//To give access to IHttpContextAccessor for Audit Data with IAuditable
+builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 
 var app = builder.Build();
 
@@ -30,5 +49,7 @@ app.UseRouting();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+
+//SoccerInitializer.Seed(app);  //disable it after published!
 
 app.Run();

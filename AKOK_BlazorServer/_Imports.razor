@@ -1,19 +1,24 @@
-﻿@using System.Net.Http
-@using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.Forms
-@using Microsoft.AspNetCore.Components.Routing
-@using Microsoft.AspNetCore.Components.Web
-@using Microsoft.AspNetCore.Components.Web.Virtualization
-@using Microsoft.JSInterop
-@using AKOK_BlazorServer
-@using AKOK_BlazorServer.Shared
-
-@using AKOK_BlazorServer.Models
-@using AKOK_BlazorServer.Services
-@using System.ComponentModel.DataAnnotations
+﻿@using System.Net.Http;
+@using System.Collections.Generic;
+@using System.Threading.Tasks;
 @using System.Linq.Expressions;
+@using System.ComponentModel.DataAnnotations;
+@using Microsoft.AspNetCore.Authorization;
+@using Microsoft.AspNetCore.Components.Authorization;
+@using Microsoft.AspNetCore.Components.Forms;
+@using Microsoft.AspNetCore.Components.Routing;
+@using Microsoft.AspNetCore.Components.Web;
+@using Microsoft.AspNetCore.Components.Web.Virtualization;
+@using Microsoft.EntityFrameworkCore;
+@using Microsoft.JSInterop;
+@using AKOK_BlazorServer;
+@using AKOK_BlazorServer.Shared;
+@using AKOK_BlazorServer.Models;
+@using AKOK_BlazorServer.Services;
 @using AKOK_BlazorServer.Controls;
-@inject ResultTextService ResultTextService
-@inject IConfiguration Configuration
-@inject NavigationManager NavigationManager
+@using AKOK_BlazorServer.Data;
+
+@inject ResultTextService ResultTextService;
+@inject IConfiguration Configuration;
+@inject NavigationManager NavigationManager;
+@inject FortuneDbContext dbContext;
