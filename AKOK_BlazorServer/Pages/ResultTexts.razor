@@ -1,0 +1,57 @@
+﻿@page "/resulttexts"
+
+@inject IResultTextService resultTextService
+@inject IJSRuntime jsRuntime
+
+<h3>Result Numbers</h3>
+<a href="/resulttext/add" class="btn btn-outline-dark my-2">Add more</a>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-primary">
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Header</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach(var resultText in resultTexts)
+            {
+                <tr>                    
+                    <td>@resultText.Number</td>
+                    <td>@resultText.HeaderText</td>                   
+
+                    <td>
+                            <a href="/resultText/edit/@resultText.ID" class="btn btn-success">Edit</a>
+                            <a class="btn btn-danger" @onclick="async ()=> await Delete(resultText)">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<Models.ResultText> resultTexts = new();
+
+    private async Task Delete(Models.ResultText resultText)
+    {
+        bool confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Are you sure?");
+        if (confirmed)
+        {
+            if (resultTextService.Delete(resultText.ID))
+            {
+                resultTexts.Remove(resultText);
+            }
+
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        resultTexts = resultTextService.GetAll();
+        base.OnInitialized();
+    }
+}

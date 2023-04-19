@@ -1,0 +1,84 @@
+﻿@page "/resulttext/add"
+@page "/resulttext/edit/{ResultId:int}"
+
+@inject IResultTextService resultTextService
+@inject IJSRuntime JSRuntime
+<PageTitle>@Title</PageTitle>
+
+<a href="/resulttexts" class="btn btn-outline-dark">Show All</a>
+<div class="row">
+    <div class="col-md-6">
+        <EditForm Model="@resultText" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label for="Number">Number</label>
+                <InputNumber class="form-control" @bind-Value="resultText.Number" />
+                <ValidationMessage For="@(()=>resultText.Number)" />
+            </div>
+
+            <div class="form-group">
+                <label for="Header">Header</label>
+                <InputText class="form-control" @bind-Value="resultText.HeaderText" />
+                <ValidationMessage For="@(()=>resultText.HeaderText)" />
+            </div>
+
+            <div class="form-group">
+                <label for="Body">Body</label>
+                <div id="editor"></div>
+                <input type="hidden" id="longText" @bind-value="resultText.LongText" />
+            </div>
+
+            <div class="my-2">
+                @message
+            </div>
+
+            <div class="my-2">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+    
+@code {
+    [Parameter]
+    public int ResultId { get; set; }
+    private string message = string.Empty;
+    Models.ResultText resultText = new();
+    private string Title = "Add Your Number";
+
+    private void Save()
+    {        
+        message = "wait...";
+        if (resultTextService.AddUpdate(resultText))
+        {
+            message = "Sucessfully added";
+            resultText = new();
+        }
+        else
+        {
+            message = "Could not saved";
+        }       
+    }
+
+    protected override void OnInitialized()
+    {
+        if (ResultId > 0)
+        {
+            Title = "Update Number";
+            resultText = resultTextService.FindById(ResultId);
+        }
+        else
+        {
+            resultText.LongText = "Default value";
+        }
+        base.OnInitialized();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeQuill");
+            //await JSRuntime.InvokeVoidAsync("setQuillContent", resultText.LongText);
+        }
+    }
+}

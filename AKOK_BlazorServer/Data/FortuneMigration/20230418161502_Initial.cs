@@ -14,14 +14,15 @@ namespace AKOK_BlazorServer.Data.FortuneMigration
                 name: "ResultTexts",
                 columns: table => new
                 {
-                    Number = table.Column<int>(type: "INTEGER", nullable: false)
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Id = table.Column<int>(type: "INTEGER", nullable: false),
+                    Number = table.Column<int>(type: "INTEGER", nullable: false),
+                    HeaderText = table.Column<string>(type: "TEXT", nullable: false),
                     LongText = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ResultTexts", x => x.Number);
+                    table.PrimaryKey("PK_ResultTexts", x => x.ID);
                 });
         }
 

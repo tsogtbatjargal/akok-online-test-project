@@ -18,17 +18,21 @@ namespace AKOK_BlazorServer.Data.FortuneMigration
 
             modelBuilder.Entity("AKOK_BlazorServer.Models.ResultText", b =>
                 {
-                    b.Property<int>("Number")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("INTEGER");
+                    b.Property<string>("HeaderText")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("LongText")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("Number");
+                    b.Property<int>("Number")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
 
                     b.ToTable("ResultTexts");
                 });

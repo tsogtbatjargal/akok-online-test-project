@@ -12,12 +12,6 @@ namespace AKOK_BlazorServer.Data
         : base(options)
         {
         }
-
         public DbSet<ResultText> ResultTexts { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<ResultText>().HasKey(n => n.Number);
-        }
     }
 }

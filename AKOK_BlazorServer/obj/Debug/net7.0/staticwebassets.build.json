@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "im4hNCyKv94HbOzznGhzD4IHxOBpDkmpavIYy/15H+Q=",
+  "Hash": "JhFljsKtXXXhrDq5PFMmXYJavsttvKVXva5DHb5N+EE=",
   "Source": "AKOK_BlazorServer",
   "BasePath": "_content/AKOK_BlazorServer",
   "Mode": "Default",
@@ -83,23 +83,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css.map"
-    },
-    {
-      "Identity": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
-      "SourceId": "AKOK_BlazorServer",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\",
-      "BasePath": "_content/AKOK_BlazorServer",
-      "RelativePath": "css/open-iconic/FONT-LICENSE",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\css\\open-iconic\\FONT-LICENSE"
     },
     {
       "Identity": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
@@ -204,6 +187,23 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
+      "Identity": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "SourceId": "AKOK_BlazorServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\",
+      "BasePath": "_content/AKOK_BlazorServer",
+      "RelativePath": "css/open-iconic/FONT-LICENSE",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\open-iconic\\FONT-LICENSE"
+    },
+    {
       "Identity": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
       "SourceId": "AKOK_BlazorServer",
       "SourceType": "Discovered",
@@ -270,6 +270,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.png"
+    },
+    {
+      "Identity": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\quill.js",
+      "SourceId": "AKOK_BlazorServer",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\",
+      "BasePath": "_content/AKOK_BlazorServer",
+      "RelativePath": "quill.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\quill.js"
     }
   ]
 }

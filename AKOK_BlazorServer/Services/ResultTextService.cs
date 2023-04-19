@@ -1,10 +1,11 @@
 ﻿using AKOK_BlazorServer.Data;
 using AKOK_BlazorServer.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace AKOK_BlazorServer.Services
 {
-    public class ResultTextService
+    public class ResultTextService : IResultTextService
     {
         private readonly FortuneDbContext _context;
         public ResultTextService(FortuneDbContext context)
@@ -36,32 +37,83 @@ namespace AKOK_BlazorServer.Services
             };
         }
 
-        public async Task<ResultText> GetResultText(int number)
+        public bool AddUpdate(ResultText resultText)
         {
-            return await _context.ResultTexts.FirstOrDefaultAsync(rt => rt.Number == number);
+            try
+            {
+                if (resultText.ID == 0)
+                    _context.ResultTexts.Add(resultText);
+                else
+                    _context.ResultTexts.Update(resultText);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
-        public async Task<List<ResultText>> GetResultTexts()
+        public bool Delete(int id)
         {
-            return await _context.ResultTexts.ToListAsync();
+            try
+            {
+                var resultText = FindById(id);
+                if (resultText == null)
+                    return false;
+                _context.ResultTexts.Remove(resultText);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+        }
+        public ResultText FindByNumber(int? number)
+        {
+            return _context.ResultTexts.FirstOrDefault(rt => rt.Number == number);
         }
 
-        public async Task CreateResultText(ResultText resultText)
-        {
-            _context.ResultTexts.Add(resultText);
-            await _context.SaveChangesAsync();
+        public ResultText FindById(int id)
+        {            
+            return _context.ResultTexts.Find(id);
         }
 
-        public async Task UpdateResultText(ResultText resultText)
+        public List<ResultText> GetAll()
         {
-            _context.Entry(resultText).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            return _context.ResultTexts.ToList();
         }
 
-        public async Task DeleteResultText(ResultText resultText)
-        {
-            _context.ResultTexts.Remove(resultText);
-            await _context.SaveChangesAsync();
-        }
+        //public async Task<ResultText> GetResultText(int number)
+        //{
+        //    return await _context.ResultTexts.FirstOrDefaultAsync(rt => rt.Number == number);
+        //}
+
+        //public async Task<List<ResultText>> GetResultTexts()
+        //{
+        //    return await _context.ResultTexts.ToListAsync();
+        //}
+
+        //public async Task CreateResultText(ResultText resultText)
+        //{
+        //    _context.ResultTexts.Add(resultText);
+        //    await _context.SaveChangesAsync();
+        //}
+
+        //public async Task UpdateResultText(ResultText resultText)
+        //{
+        //    _context.Entry(resultText).State = EntityState.Modified;
+        //    await _context.SaveChangesAsync();
+        //}
+
+        //public async Task DeleteResultText(ResultText resultText)
+        //{
+        //    _context.ResultTexts.Remove(resultText);
+        //    await _context.SaveChangesAsync();
+        //}
+
+
     }
 }

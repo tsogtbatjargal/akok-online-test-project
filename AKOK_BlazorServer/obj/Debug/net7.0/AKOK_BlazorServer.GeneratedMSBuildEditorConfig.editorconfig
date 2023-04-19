@@ -24,6 +24,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29udHJvbHNcVGl0bGVDb21wb25lbnQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/MyWork/blazor/AKOK_BlazorServer/AKOK_BlazorServer/Pages/AddUpdateResultText.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRkVXBkYXRlUmVzdWx0VGV4dC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/MyWork/blazor/AKOK_BlazorServer/AKOK_BlazorServer/Pages/Admin.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -42,6 +46,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/MyWork/blazor/AKOK_BlazorServer/AKOK_BlazorServer/Pages/Result.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVzdWx0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/MyWork/blazor/AKOK_BlazorServer/AKOK_BlazorServer/Pages/ResultTexts.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVzdWx0VGV4dHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/MyWork/blazor/AKOK_BlazorServer/AKOK_BlazorServer/Shared/SurveyPrompt.razor]

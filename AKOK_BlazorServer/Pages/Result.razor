@@ -1,34 +1,58 @@
 ﻿@page "/result"
+@inject IResultTextService resultTextService
 
 <TitleComponent TitleName="Үр дүн"></TitleComponent>
 
-<h4>Your Name Number is: @resultNameNumber</h4>
-@*<p>@ResultTextService.GetLongText(resultNameNumber)</p>
+<h4>Your Name Number is: @nameNumber</h4>
+<div>@((MarkupString)nameNumberBodyText)</div>
 
-@if (resultNameNumber != dynamicsOfLifeNumber)
+@if (nameNumber != dynamicsOfLifeNumber)
 {
     <h4>Your Dynamics Of Life Number  is: @dynamicsOfLifeNumber</h4>
-    <p>@ResultTextService.GetLongText(dynamicsOfLifeNumber)</p>
+    <div>@((MarkupString)dynamicsOfLifeNumberBodyText)</div>
 }
 
 @if (hybridNumber != null && hybridNumber != 0)
 {
     <h4>Your Hybrid Of Life Number  is: @hybridNumber</h4>
-    <p>@ResultTextService.GetLongText(hybridNumber.Value)</p>
-}*@
+    <div>@((MarkupString)hybridNumberBodyText)</div>
+}
 
 @code {
-    private int resultNameNumber;
+    private int nameNumber;
     private int? hybridNumber;
     private int dynamicsOfLifeNumber;
+
     private bool showHybridNumber = true;
+
+    private string nameNumberBodyText;
+    private string hybridNumberBodyText;
+    private string dynamicsOfLifeNumberBodyText;
+
+    Models.ResultText resultText = new();
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         var fortuneNumber = ResultTextService.FortuneNumberResult;
-        resultNameNumber = fortuneNumber.ResultNameNumber;
-        dynamicsOfLifeNumber = fortuneNumber.DynamicsOfLifeNumber;
-        hybridNumber = fortuneNumber.ResultNameNumberHybrid;
+        nameNumber = fortuneNumber.ResultNameNumber;       
+        dynamicsOfLifeNumber = fortuneNumber.DynamicsOfLifeNumber;      
+
+        var result = resultTextService.FindByNumber(nameNumber);
+        if (result != null)
+        {
+            nameNumberBodyText = result.LongText;
+        }
+
+        result = resultTextService.FindByNumber(dynamicsOfLifeNumber);
+        if (result != null)
+        {
+            dynamicsOfLifeNumberBodyText = result.LongText;
+        }
+
+        if (fortuneNumber.ResultNameNumberHybrid.HasValue)
+        {
+            nameNumberBodyText = resultTextService.FindByNumber(hybridNumber).LongText;
+        }        
     }
 }

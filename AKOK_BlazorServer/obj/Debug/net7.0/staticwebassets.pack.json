@@ -57,6 +57,10 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "C:\\MyWork\\blazor\\AKOK_BlazorServer\\AKOK_BlazorServer\\wwwroot\\quill.js",
+      "PackagePath": "staticwebassets\\quill.js"
+    },
+    {
       "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.AKOK_BlazorServer.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

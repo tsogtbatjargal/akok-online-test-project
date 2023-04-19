@@ -24,6 +24,7 @@ builder.Services.AddDbContext<FortuneDbContext>(options =>
 
 //To give access to IHttpContextAccessor for Audit Data with IAuditable
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<IResultTextService, ResultTextService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
@@ -49,7 +50,5 @@ app.UseRouting();
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
-//SoccerInitializer.Seed(app);  //disable it after published!
 
 app.Run();
