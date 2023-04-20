@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,12 @@ builder.Services.AddDbContext<FortuneDbContext>(options =>
 
 //To give access to IHttpContextAccessor for Audit Data with IAuditable
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// Configure logging.
+builder.Logging.AddConsole(); // Add the Console logger.
+builder.Logging.AddDebug(); // Add the Debug logger.
+builder.Logging.AddEventSourceLogger(); // Add the EventSource logger.
+
 builder.Services.AddTransient<IResultTextService, ResultTextService>();
 
 builder.Services.AddControllers()

@@ -1,11 +1,16 @@
 ﻿@page "/resulttext/add"
 @page "/resulttext/edit/{ResultId:int}"
 
+@using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Components.Web
+
 @inject IResultTextService resultTextService
 @inject IJSRuntime JSRuntime
+
 <PageTitle>@Title</PageTitle>
 
 <a href="/resulttexts" class="btn btn-outline-dark">Show All</a>
+
 <div class="row">
     <div class="col-md-6">
         <EditForm Model="@resultText" OnValidSubmit="Save">
@@ -20,13 +25,52 @@
                 <label for="Header">Header</label>
                 <InputText class="form-control" @bind-Value="resultText.HeaderText" />
                 <ValidationMessage For="@(()=>resultText.HeaderText)" />
-            </div>
+            </div>      
 
-            <div class="form-group">
-                <label for="Body">Body</label>
-                <div id="editor"></div>
-                <input type="hidden" id="longText" @bind-value="resultText.LongText" />
-            </div>
+            @if (EditorEnabled)
+            {
+                <div id="toolbar">
+                    <span class="ql-formats">
+                        <select class="ql-font">
+                            <option selected=""></option>
+                            <option value="serif"></option>
+                            <option value="monospace"></option>
+                        </select>
+                        <select class="ql-size">
+                            <option value="small"></option>
+                            <option selected=""></option>
+                            <option value="large"></option>
+                            <option value="huge"></option>
+                        </select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-bold"></button>
+                        <button class="ql-italic"></button>
+                        <button class="ql-underline"></button>
+                        <button class="ql-strike"></button>
+                    </span>
+                    <span class="ql-formats">
+                        <select class="ql-color"></select>
+                        <select class="ql-background"></select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-list" value="ordered"></button>
+                        <button class="ql-list" value="bullet"></button>
+                        <button class="ql-indent" value="-1"></button>
+                        <button class="ql-indent" value="+1"></button>
+                        <select class="ql-align">
+                            <option selected=""></option>
+                            <option value="center"></option>
+                            <option value="right"></option>
+                            <option value="justify"></option>
+                        </select>
+                    </span>
+                    <span class="ql-formats">
+                        <button class="ql-link"></button>
+                    </span>
+                </div>
+            }
+            <div @ref="@divEditorElement" />            
 
             <div class="my-2">
                 @message
@@ -35,50 +79,99 @@
             <div class="my-2">
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
+
+            <br />
+            <button class="btn btn-info" @onclick="DisableQuillEditor">Disable Editor</button>
+            <br />
+
         </EditForm>
     </div>
 </div>
-    
+
+
 @code {
+    private string strSavedContent = "";
+    private ElementReference divEditorElement;
+    private string EditorContent;
+    private string EditorHTMLContent;
+    private bool EditorEnabled = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ResultId != 0)
+        {
+            Title = "Edit Result Text";
+            resultText = await ResultTextService.GetResultTextAsync(ResultId);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<string>(
+            "QuillFunctions.createQuill", divEditorElement);
+        }
+
+        if (EditorEnabled == true)
+        {
+            if (resultText.LongText != "" || resultText.LongText != null)
+            {
+                await LoadContent(resultText.LongText);
+            }
+        }
+        
+    }
+
+    async Task LoadContent(string strSavedContent)
+    {
+        var QuillDelta = await JSRuntime.InvokeAsync<object>(
+            "QuillFunctions.loadQuillContent", divEditorElement, strSavedContent);
+    }
+
+    async Task DisableQuillEditor()
+    {
+        EditorEnabled = false;
+        await JSRuntime.InvokeAsync<object>(
+            "QuillFunctions.disableQuillEditor", divEditorElement);
+    }
+
+    /// <summary>
+    /// Below area is for ResultText object header and number without quill
+    /// </summary>
     [Parameter]
     public int ResultId { get; set; }
     private string message = string.Empty;
     Models.ResultText resultText = new();
     private string Title = "Add Your Number";
 
-    private void Save()
-    {        
-        message = "wait...";
-        if (resultTextService.AddUpdate(resultText))
+    private async Task Save()
+    {
+        EditorHTMLContent = "";
+        EditorContent = await JSRuntime.InvokeAsync<string>(
+            "QuillFunctions.getQuillContent", divEditorElement);
+        resultText.LongText = EditorContent;
+
+        if (resultText.ID != 0)
         {
-            message = "Sucessfully added";
-            resultText = new();
+            await ResultTextService.UpdateResultTextAsync(resultText);
+            message = "Result text updated successfully.";
         }
         else
         {
-            message = "Could not saved";
-        }       
+            await ResultTextService.AddResultTextAsync(resultText);
+            message = "Result text added successfully.";
+        }
+
+        NavigationManager.NavigateTo("/resulttexts");
+    }
+           
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/resulttexts");
     }
 
-    protected override void OnInitialized()
-    {
-        if (ResultId > 0)
-        {
-            Title = "Update Number";
-            resultText = resultTextService.FindById(ResultId);
-        }
-        else
-        {
-            resultText.LongText = "Default value";
-        }
-        base.OnInitialized();
-    }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("initializeQuill");
-            //await JSRuntime.InvokeVoidAsync("setQuillContent", resultText.LongText);
-        }
-    }
+
 }
