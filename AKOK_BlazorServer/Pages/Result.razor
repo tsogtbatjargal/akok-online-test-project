@@ -17,24 +17,15 @@
 
 @if (nameNumber != dynamicsOfLifeNumber)
 {
-    <h4>Your Dynamics Of Life Number  is: @dynamicsOfLifeNumber</h4>
-    <div>@((MarkupString)dynamicsOfLifeNumberBodyText)</div>
-
-    @*@if (EditorEnabled)
-    {
-        <div id="toolbar">
-        </div>
-    }
-    <div @ref="@divEditorElement2" />*@
-    
+    <h4>Your Dynamics Of Life Number  is: @dynamicsOfLifeNumber</h4>        
+    <div @ref="@divEditorElement2" />    
 }
 
 @if (hybridNumber != null && hybridNumber != 0)
 {
-    <h4>Your Hybrid Of Life Number  is: @hybridNumber</h4>
-    <div>@((MarkupString)hybridNumberBodyText)</div>
+    <h4>Your Hybrid Of Life Number  is: @hybridNumber</h4>     
 }
-
+<div @ref="@divEditorElement3" />
 
 @code {
     private string strSavedContent = "";
@@ -49,71 +40,53 @@
         if (firstRender)
         {
             await JSRuntime.InvokeAsync<string>(
-                "QuillFunctions.createQuill", divEditorElement);            
+                "QuillFunctions.createQuill", divEditorElement);  
+            await JSRuntime.InvokeAsync<string>(
+                "QuillFunctions.createQuill", divEditorElement2);
+            await JSRuntime.InvokeAsync<string>(
+                "QuillFunctions.createQuill", divEditorElement3);
         }
 
         if (EditorEnabled == true)  //editor should be enabled first
         {
-            if (resultText.LongText != "" || resultText.LongText != null)
+            // Order matters of following numbers. It should be disabled in the end
+            if (dynamicsOfLifeNumberBodyText != "" | dynamicsOfLifeNumberBodyText != null)
             {
-                await LoadContent(nameNumberBodyText);
-
-                await DisableQuillEditor();
+                await LoadContent(dynamicsOfLifeNumberBodyText, divEditorElement2);
+                await DisableQuillEditor(divEditorElement2);
             }
-            if (nameNumber != dynamicsOfLifeNumber)
+
+            if (hybridNumberBodyText != null)
             {
-                //await LoadContent(hybridNumberBodyText);
-                //await DisableQuillEditor();
+                await LoadContent(hybridNumberBodyText, divEditorElement3);
+                await DisableQuillEditor(divEditorElement3);
             }
-        }
-
-        
+            if (nameNumberBodyText != "" | nameNumberBodyText != null)
+            {
+                await LoadContent(nameNumberBodyText, divEditorElement);
+                await DisableQuillEditor(divEditorElement);
+                EditorEnabled = false;
+            }
+            
+        }       
 
     }
     
-    async Task GetText()
-    {
-        EditorHTMLContent = "";
-        EditorContent = await JSRuntime.InvokeAsync<string>(
-            "QuillFunctions.getQuillText", divEditorElement);
-    }
-    async Task GetHTML()
-    {
-        EditorContent = "";
-        EditorHTMLContent = await JSRuntime.InvokeAsync<string>(
-            "QuillFunctions.getQuillHTML", divEditorElement);
-    }
-    async Task GetEditorContent()
-    {
-        EditorHTMLContent = "";
-        EditorContent = await JSRuntime.InvokeAsync<string>(
-            "QuillFunctions.getQuillContent", divEditorElement);
-    }
-
-    async Task SaveContent()
-    {
-        strSavedContent = await JSRuntime.InvokeAsync<string>(
-            "QuillFunctions.getQuillContent", divEditorElement);         
-
-    }
-    async Task LoadContent(string strSavedContent)
+   
+    async Task LoadContent(string strSavedContent, ElementReference editorElement )
     {
         var QuillDelta = await JSRuntime.InvokeAsync<object>(
-            "QuillFunctions.loadQuillContent", divEditorElement, strSavedContent);
+            "QuillFunctions.loadQuillContent", editorElement, strSavedContent);
     }
 
-    async Task DisableQuillEditor()
+    async Task DisableQuillEditor(ElementReference editorElement)
     {
-        EditorEnabled = false;
+        //EditorEnabled = false;
         await JSRuntime.InvokeAsync<object>(
-            "QuillFunctions.disableQuillEditor", divEditorElement);
+            "QuillFunctions.disableQuillEditor", editorElement);
     }
-
 
 }
-
-
-
 
 @code {
     private int nameNumber;
