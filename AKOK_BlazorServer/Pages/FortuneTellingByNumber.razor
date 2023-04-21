@@ -1,23 +1,23 @@
 ﻿@page "/"
 @page "/fortunetellingbynumber"
 
-<TitleComponent TitleName="Hello, let me tell you your fortune"></TitleComponent>
+<TitleComponent TitleName="Hello, Let's Find Your Lucky Numbers in Numerlogy"></TitleComponent>
 
 <EditForm Model="@person" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group">
-        <label for="firstName">Нэр:</label>
+        <label for="firstName">First Name:</label>
         <InputText id="firstName" @bind-value="person.FirstName" ValueExpression="@(() => person.FirstName)" class="form-control" />
     </div>
     <div class="form-group">
-        <label for="lastName">Овог Нэр:</label>
+        <label for="lastName">Last Name:</label>
         <InputText id="lastName" @bind-value="person.LastName" ValueExpression="@(() => person.LastName)" class="form-control" />
 
     </div>
     <div class="form-group">
-        <label for="dateOfBirth">Төрсөн Өдөр:</label>
+        <label for="dateOfBirth">Date of Birth:</label>
         <InputDate TValue="DateTime" id="dateOfBirth" @bind-value="person.DateOfBirth" ValueExpression="@(() => person.DateOfBirth)" class="form-control" />
     </div>
 

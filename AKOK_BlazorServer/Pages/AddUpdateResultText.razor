@@ -10,6 +10,7 @@
 <PageTitle>@Title</PageTitle>
 
 <a href="/resulttexts" class="btn btn-outline-dark">Show All</a>
+<button id="editor-btn" class="btn btn-info" @onclick="ToggleEditor">@(EditorEnabled ? "Disable" : "Enable") Editor</button>
 
 <div class="row">
     <div class="col-md-6">
@@ -77,14 +78,11 @@
             </div>
 
             <div class="my-2">
-                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="submit" class="btn btn-primary">Save</button>                
             </div>
 
-            <br />
-            <button class="btn btn-info" @onclick="DisableQuillEditor">Disable Editor</button>
-            <button id="editor-btn" class="btn btn-info" @onclick="ToggleEditor">@(EditorEnabled ? "Disable" : "Enable") Editor</button>
-
-            <br />
+            
+            
 
         </EditForm>
     </div>
@@ -180,13 +178,10 @@
         }
 
         //NavigationManager.NavigateTo("/resulttexts");
-    }
-           
+    }           
 
     private void Cancel()
     {
         NavigationManager.NavigateTo("/resulttexts");
     }
-
-
 }

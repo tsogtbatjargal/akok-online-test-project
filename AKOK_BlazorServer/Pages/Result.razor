@@ -6,7 +6,7 @@
 
 <TitleComponent TitleName="Here is your numbers!"></TitleComponent>
 
-<h4>Your Name Number is: @nameNumber</h4>
+<h5>Your Heart's Desire Number is: @nameNumber</h5>
 @if (EditorEnabled)
 {
     <div id="toolbar">        
@@ -17,15 +17,17 @@
 
 @if (nameNumber != dynamicsOfLifeNumber)
 {
-    <h4>Your Dynamics Of Life Number  is: @dynamicsOfLifeNumber</h4>        
+    <h5>Your Dynamics Of Life Number is: @dynamicsOfLifeNumber</h5>        
     <div @ref="@divEditorElement2" />    
 }
 
 @if (hybridNumber != null && hybridNumber != 0)
 {
-    <h4>Your Hybrid Of Life Number  is: @hybridNumber</h4>     
+    <h5>Your Hybrid Of Life Number  is: @hybridNumber</h5>     
 }
 <div @ref="@divEditorElement3" />
+
+<a href="/fortunetellingbynumber" class="btn btn-info">Back To Home</a>
 
 @code {
     private string strSavedContent = "";

@@ -13,9 +13,6 @@
             // set quill at the object we can call
             // methods on later
             new Quill(quillElement, options);
-
-            // create a new Quill editor instance and store it in the __quill property of the passed element
-            /*quillElement.__quill = new Quill(quillElement, options);*/
         },
         getQuillContent: function (quillControl) {
             return JSON.stringify(quillControl.__quill.getContents());

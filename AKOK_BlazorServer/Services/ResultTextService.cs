@@ -173,34 +173,5 @@ namespace AKOK_BlazorServer.Services
             }
         }
 
-        //public async Task<ResultText> GetResultText(int number)
-        //{
-        //    return await _context.ResultTexts.FirstOrDefaultAsync(rt => rt.Number == number);
-        //}
-
-        //public async Task<List<ResultText>> GetResultTexts()
-        //{
-        //    return await _context.ResultTexts.ToListAsync();
-        //}
-
-        //public async Task CreateResultText(ResultText resultText)
-        //{
-        //    _context.ResultTexts.Add(resultText);
-        //    await _context.SaveChangesAsync();
-        //}
-
-        //public async Task UpdateResultText(ResultText resultText)
-        //{
-        //    _context.Entry(resultText).State = EntityState.Modified;
-        //    await _context.SaveChangesAsync();
-        //}
-
-        //public async Task DeleteResultText(ResultText resultText)
-        //{
-        //    _context.ResultTexts.Remove(resultText);
-        //    await _context.SaveChangesAsync();
-        //}
-
-
     }
 }
