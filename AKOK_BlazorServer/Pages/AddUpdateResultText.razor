@@ -82,6 +82,8 @@
 
             <br />
             <button class="btn btn-info" @onclick="DisableQuillEditor">Disable Editor</button>
+            <button id="editor-btn" class="btn btn-info" @onclick="ToggleEditor">@(EditorEnabled ? "Disable" : "Enable") Editor</button>
+
             <br />
 
         </EditForm>
@@ -136,6 +138,19 @@
         await JSRuntime.InvokeAsync<object>(
             "QuillFunctions.disableQuillEditor", divEditorElement);
     }
+    private async Task ToggleEditor()
+    {
+        EditorEnabled = !EditorEnabled;
+        if (EditorEnabled)
+        {
+            await JSRuntime.InvokeAsync<object>("QuillFunctions.enableQuillEditor", divEditorElement);
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("QuillFunctions.disableQuillEditor", divEditorElement);
+        }
+    }
+
 
     /// <summary>
     /// Below area is for ResultText object header and number without quill
@@ -164,7 +179,7 @@
             message = "Result text added successfully.";
         }
 
-        NavigationManager.NavigateTo("/resulttexts");
+        //NavigationManager.NavigateTo("/resulttexts");
     }
            
 

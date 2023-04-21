@@ -1,15 +1,32 @@
 ﻿@page "/result"
+@*@page "/result/{FortuneId:int}"*@
 @inject IResultTextService resultTextService
 
-<TitleComponent TitleName="Үр дүн"></TitleComponent>
+@inject IJSRuntime JSRuntime
+
+<TitleComponent TitleName="Here is your numbers!"></TitleComponent>
 
 <h4>Your Name Number is: @nameNumber</h4>
-<div>@((MarkupString)nameNumberBodyText)</div>
+@if (EditorEnabled)
+{
+    <div id="toolbar">        
+    </div>
+}
+<div @ref="@divEditorElement" />
+
 
 @if (nameNumber != dynamicsOfLifeNumber)
 {
     <h4>Your Dynamics Of Life Number  is: @dynamicsOfLifeNumber</h4>
     <div>@((MarkupString)dynamicsOfLifeNumberBodyText)</div>
+
+    @*@if (EditorEnabled)
+    {
+        <div id="toolbar">
+        </div>
+    }
+    <div @ref="@divEditorElement2" />*@
+    
 }
 
 @if (hybridNumber != null && hybridNumber != 0)
@@ -17,6 +34,86 @@
     <h4>Your Hybrid Of Life Number  is: @hybridNumber</h4>
     <div>@((MarkupString)hybridNumberBodyText)</div>
 }
+
+
+@code {
+    private string strSavedContent = "";
+    private ElementReference divEditorElement;
+    private ElementReference divEditorElement2;
+    private ElementReference divEditorElement3;
+    private string EditorContent;
+    private string EditorHTMLContent;
+    private bool EditorEnabled = true;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeAsync<string>(
+                "QuillFunctions.createQuill", divEditorElement);            
+        }
+
+        if (EditorEnabled == true)  //editor should be enabled first
+        {
+            if (resultText.LongText != "" || resultText.LongText != null)
+            {
+                await LoadContent(nameNumberBodyText);
+
+                await DisableQuillEditor();
+            }
+            if (nameNumber != dynamicsOfLifeNumber)
+            {
+                //await LoadContent(hybridNumberBodyText);
+                //await DisableQuillEditor();
+            }
+        }
+
+        
+
+    }
+    
+    async Task GetText()
+    {
+        EditorHTMLContent = "";
+        EditorContent = await JSRuntime.InvokeAsync<string>(
+            "QuillFunctions.getQuillText", divEditorElement);
+    }
+    async Task GetHTML()
+    {
+        EditorContent = "";
+        EditorHTMLContent = await JSRuntime.InvokeAsync<string>(
+            "QuillFunctions.getQuillHTML", divEditorElement);
+    }
+    async Task GetEditorContent()
+    {
+        EditorHTMLContent = "";
+        EditorContent = await JSRuntime.InvokeAsync<string>(
+            "QuillFunctions.getQuillContent", divEditorElement);
+    }
+
+    async Task SaveContent()
+    {
+        strSavedContent = await JSRuntime.InvokeAsync<string>(
+            "QuillFunctions.getQuillContent", divEditorElement);         
+
+    }
+    async Task LoadContent(string strSavedContent)
+    {
+        var QuillDelta = await JSRuntime.InvokeAsync<object>(
+            "QuillFunctions.loadQuillContent", divEditorElement, strSavedContent);
+    }
+
+    async Task DisableQuillEditor()
+    {
+        EditorEnabled = false;
+        await JSRuntime.InvokeAsync<object>(
+            "QuillFunctions.disableQuillEditor", divEditorElement);
+    }
+
+
+}
+
+
+
 
 @code {
     private int nameNumber;
@@ -35,24 +132,31 @@
     {
         base.OnInitialized();
         var fortuneNumber = ResultTextService.FortuneNumberResult;
-        nameNumber = fortuneNumber.ResultNameNumber;       
-        dynamicsOfLifeNumber = fortuneNumber.DynamicsOfLifeNumber;      
 
-        var result = resultTextService.FindByNumber(nameNumber);
-        if (result != null)
+        if (fortuneNumber != null)
         {
-            nameNumberBodyText = result.LongText;
+            nameNumber = fortuneNumber.ResultNameNumber;
+            dynamicsOfLifeNumber = fortuneNumber.DynamicsOfLifeNumber;
+
+            var result = resultTextService.FindByNumber(nameNumber);
+            if (result != null)
+            {
+                nameNumberBodyText = result.LongText;
+
+            }
+
+            result = resultTextService.FindByNumber(dynamicsOfLifeNumber);
+            if (result != null)
+            {
+                dynamicsOfLifeNumberBodyText = result.LongText;                
+            }
+
+            if (fortuneNumber.ResultNameNumberHybrid.HasValue)
+            {
+                nameNumberBodyText = resultTextService.FindByNumber(hybridNumber).LongText;
+            }
         }
+        
 
-        result = resultTextService.FindByNumber(dynamicsOfLifeNumber);
-        if (result != null)
-        {
-            dynamicsOfLifeNumberBodyText = result.LongText;
-        }
-
-        if (fortuneNumber.ResultNameNumberHybrid.HasValue)
-        {
-            nameNumberBodyText = resultTextService.FindByNumber(hybridNumber).LongText;
-        }        
     }
 }

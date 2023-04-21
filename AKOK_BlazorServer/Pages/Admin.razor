@@ -21,23 +21,6 @@
 <button class="btn btn-info" @onclick="GenerateCode">Generate Code</button>
 <button class="btn btn-success" @onclick="StoreValue">Store Value</button>
 
-@*<div class="form-group">
-    <label for="number">Number:</label>
-    <select class="form-control" id="number" @onchange="@((ChangeEventArgs args) => UpdateLongText(args.Value.ToString()))">
-        @foreach (var number in Numbers)
-        {
-            <option value="@number">@number</option>
-        }
-    </select>
-</div>*@
-
-<div class="form-group">
-    <label for="longText">Long Text:</label>
-    <textarea class="form-control" id="longText" rows="3" @bind="@longText"></textarea>
-</div>
-<button type="button" class="btn btn-primary" @onclick="@Save">Save</button>
-
-<button type="button" class="btn btn-secondary" @onclick="@Cancel">Cancel</button>
 
 @code {
     private int selectedNumber { get; set; }
@@ -82,9 +65,4 @@
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
-    //private void UpdateLongText(string value)
-    //{
-    //    selectedNumber = int.Parse(value);
-    //    longText = ResultTextService.GetLongText(selectedNumber);
-    //}
 }
