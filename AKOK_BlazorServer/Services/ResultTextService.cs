@@ -39,23 +39,6 @@ namespace AKOK_BlazorServer.Services
             };
         }
 
-        public bool AddUpdate(ResultText resultText)
-        {
-            try
-            {
-                if (resultText.ID == 0)
-                    _context.ResultTexts.Add(resultText);
-                else
-                    _context.ResultTexts.Update(resultText);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
         public bool Delete(int id)
         {
             try
@@ -67,7 +50,7 @@ namespace AKOK_BlazorServer.Services
                 _context.SaveChanges();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
 
                 return false;
@@ -166,7 +149,7 @@ namespace AKOK_BlazorServer.Services
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 // Log the exception
                 return false;

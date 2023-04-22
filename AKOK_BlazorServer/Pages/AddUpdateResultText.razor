@@ -89,11 +89,9 @@
 </div>
 
 
-@code {
-    private string strSavedContent = "";
+@code {    
     private ElementReference divEditorElement;
     private string EditorContent;
-    private string EditorHTMLContent;
     private bool EditorEnabled = true;
 
     protected override async Task OnInitializedAsync()
@@ -160,8 +158,7 @@
     private string Title = "Add Your Number";
 
     private async Task Save()
-    {
-        EditorHTMLContent = "";
+    {        
         EditorContent = await JSRuntime.InvokeAsync<string>(
             "QuillFunctions.getQuillContent", divEditorElement);
         resultText.LongText = EditorContent;

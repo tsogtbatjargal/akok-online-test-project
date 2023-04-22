@@ -22,15 +22,7 @@
 <button class="btn btn-success" @onclick="StoreValue">Store Value</button>
 
 
-@code {
-    private int selectedNumber { get; set; }
-    private string longText { get; set; }
-    private Result result { get; set; }
-
-    private readonly List<int> Numbers = new List<int>
-    {
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22
-    };
+@code {       
 
     [Inject]
     private ResultTextService resultTextService { get; set; }
@@ -38,10 +30,7 @@
     private string generatedCode;
 
     protected override void OnInitialized()
-    {
-        selectedNumber = Numbers.First();
-        //longText = ResultTextService.GetLongText(selectedNumber);
-    }
+    {}
 
     private void GenerateCode()
     {
@@ -53,16 +42,6 @@
     {
         PassCode.SetValue(generatedCode);
     }    
-
-    private void Save()
-    {
-        Configuration[$"longText:{selectedNumber}"] = longText;
-        NavigationManager.NavigateTo("/admin");
-    }
-
-    private void Cancel()
-    {
-        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
-    }
+        
 
 }

@@ -30,12 +30,11 @@
 <a href="/fortunetellingbynumber" class="btn btn-info">Back To Home</a>
 
 @code {
-    private string strSavedContent = "";
+    
     private ElementReference divEditorElement;
     private ElementReference divEditorElement2;
     private ElementReference divEditorElement3;
-    private string EditorContent;
-    private string EditorHTMLContent;
+    
     private bool EditorEnabled = true;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -58,7 +57,7 @@
                 await DisableQuillEditor(divEditorElement2);
             }
 
-            if (hybridNumberBodyText != null)
+            if (hybridNumberBodyText != "" | hybridNumberBodyText != null)
             {
                 await LoadContent(hybridNumberBodyText, divEditorElement3);
                 await DisableQuillEditor(divEditorElement3);
@@ -95,10 +94,8 @@
     private int? hybridNumber;
     private int dynamicsOfLifeNumber;
 
-    private bool showHybridNumber = true;
-
     private string nameNumberBodyText;
-    private string hybridNumberBodyText;
+    private string hybridNumberBodyText;  // this can 11 or 22
     private string dynamicsOfLifeNumberBodyText;
 
     Models.ResultText resultText = new();
