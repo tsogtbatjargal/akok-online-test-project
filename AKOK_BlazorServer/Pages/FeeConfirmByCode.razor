@@ -1,6 +1,6 @@
 ﻿@page "/feeconfirmbycode"
 
-<TitleComponent TitleName="Баталгаажуулалт"></TitleComponent>
+<TitleComponent TitleName="Confirmation"></TitleComponent>
 
 <EditForm Model="@person" OnValidSubmit="HandleValidSubmit">
     <DataAnnotationsValidator />
@@ -62,8 +62,10 @@
 
     private void CheckString()
     {
+        //var tempCode = "1000"; // temp
         var storedPassCodes = PassCode.GetMyValue();
         if (storedPassCodes != null && storedPassCodes.Contains(inputString))
+        //if ((storedPassCodes != null && storedPassCodes.Contains(inputString)) | tempCode == inputString)
         {
             showSuccessMessage = true;
             showErrorMessage = false;

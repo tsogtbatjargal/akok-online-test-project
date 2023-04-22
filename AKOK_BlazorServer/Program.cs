@@ -58,4 +58,6 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
+// Reference Seed Data //
+//FortuneInitializer.Seed(app);
 app.Run();

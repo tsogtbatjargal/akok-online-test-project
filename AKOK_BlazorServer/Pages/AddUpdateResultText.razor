@@ -7,7 +7,7 @@
 @inject IResultTextService resultTextService
 @inject IJSRuntime JSRuntime
 
-<PageTitle>@Title</PageTitle>
+<TitleComponent TitleName=@Title></TitleComponent>
 
 <a href="/resulttexts" class="btn btn-outline-dark">Show All</a>
 <button id="editor-btn" class="btn btn-info" @onclick="ToggleEditor">@(EditorEnabled ? "Disable" : "Enable") Editor</button>
